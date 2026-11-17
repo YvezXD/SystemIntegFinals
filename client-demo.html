@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siargao Souvenir Guide (External App Consuming REST API)</title>
+  <style>
+    /* ========================================================================
+       SIMPLE STYLES FOR THE EXTERNAL CLIENT APP DEMO
+       Demonstrates API Reusability (Section IV - Additional Challenge)
+       ======================================================================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #1a3328;
+      color: #222;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .demo-banner {
+      max-width: 900px;
+      width: 100%;
+      background: #274c3b;
+      color: #fff;
+      border: 1px solid #487a62;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .demo-banner h1 { font-size: 1.1rem; color: #ffd479; }
+    .demo-banner p { font-size: 0.86rem; color: #d5e8de; }
+    .back-btn {
+      background: #b85a28;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Mobile App Frame */
+    .phone-frame {
+      width: 100%;
+      max-width: 420px;
+      background: #faf6f0;
+      border: 10px solid #102119;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    .app-header {
+      background: linear-gradient(135deg, #0f766e, #115e59);
+      color: #fff;
+      padding: 22px 18px;
+    }
+    .app-tag {
+      font-size: 0.7rem;
+      background: rgba(255,255,255,0.2);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .app-header h2 { font-size: 1.3rem; margin-top: 6px; }
+    .app-header p { font-size: 0.82rem; opacity: 0.9; margin-top: 2px; }
+
+    .app-search {
+      padding: 12px 16px;
+      background: #fff;
+      border-bottom: 1px solid #e5ddd0;
+    }
+    .app-search input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 20px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.88rem;
+    }
+
+    .app-status-bar {
+      background: #ecfdf5;
+      color: #065f46;
+      font-size: 0.76rem;
+      padding: 6px 16px;
+      font-family: Consolas, monospace;
+      border-bottom: 1px solid #a7f3d0;
+    }
+
+    .app-list {
+      max-height: 540px;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .souvenir-item {
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      gap: 12px;
+      border: 1px solid #e6decb;
+      align-items: center;
+    }
+    .souvenir-item img {
+      width: 78px;
+      height: 78px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .souvenir-info h4 { font-size: 0.95rem; color: #0f766e; }
+    .souvenir-info .local { font-size: 0.78rem; color: #64748b; font-style: italic; }
+    .souvenir-info .town { font-size: 0.78rem; margin-top: 4px; color: #334155; }
+    .souvenir-info .price {
+      display: inline-block;
+      margin-top: 4px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Explanation Banner for the Professor / Presentation -->
+  <div class="demo-banner">
+    <div>
+      <h1>Section IV Additional Challenge: External Application Consuming Our REST API</h1>
+      <p>
+        This separate "Siargao Tourist Souvenir Companion" mobile app fetches live JSON data from
+        <code>GET /api/records.php</code> to demonstrate API reusability across multiple applications.
+      </p>
+    </div>
+    <a href="index.html" class="back-btn">&larr; Back to Main Website</a>
+  </div>
+
+  <!-- Simulated Mobile Application UI -->
+  <div class="phone-frame">
+    <div class="app-header">
+      <span class="app-tag">EXTERNAL MOBILE WEB APP</span>
+      <h2>Discover Siargao Crafts</h2>
+      <p>Tourist Pasalubong &amp; Artisan Locator</p>
+    </div>
+
+    <div class="app-status-bar" id="app-api-status">
+      Connecting to GET /api/records.php ...
+    </div>
+
+    <div class="app-search">
+      <input
+        type="text"
+        id="mobile-search"
+        placeholder="Filter souvenirs (e.g. Hat, Dapa, Rattan)..."
+        oninput="renderMobileList()"
+      />
+    </div>
+
+    <div class="app-list" id="mobile-list">
+      <!-- Populated via Fetch API -->
+    </div>
+  </div>
+
+  <script src="database/initial_data.js"></script>
+  <script>
+    // ========================================================================
+    // SIMPLE SCRIPT: Fetches data from /api/records.php and displays it
+    // ========================================================================
+    let souvenirList = [];
+
+    async function loadFromApi() {
+      const statusEl = document.getElementById("app-api-status");
+      try {
+        const response = await fetch("api/records.php");
+        const json = await response.json();
+        if (response.ok && json.data) {
+          souvenirList = json.data;
+          statusEl.textContent = `API Connected: GET /api/records.php (${souvenirList.length} items)`;
+          renderMobileList();
+          return;
+        }
+      } catch (err) {
+        // Fallback if opened without server
+      }
+
+      const saved = localStorage.getItem("siargao_handicrafts_backup");
+      souvenirList = saved ? JSON.parse(saved) : INITIAL_HANDICRAFTS_DATA;
+      statusEl.textContent = `Loaded ${souvenirList.length} items from shared repository`;
+      renderMobileList();
+    }
+
+    function renderMobileList() {
+      const q = document.getElementById("mobile-search").value.trim().toLowerCase();
+      const container = document.getElementById("mobile-list");
+
+      const filtered = souvenirList.filter(function (item) {
+        if (!q) return true;
+        return (
+          item.name.toLowerCase().includes(q) ||
+          item.municipality.toLowerCase().includes(q) ||
+          item.materials.toLowerCase().includes(q)
+        );
+      });
+
+      let html = "";
+      for (let i = 0; i < filtered.length; i++) {
+        const s = filtered[i];
+        html += `
+          <div class="souvenir-item">
+            <img src="${s.image_url}" alt="${s.name}" onerror="this.src='images/01-buri-hat.jpg'" />
+            <div class="souvenir-info">
+              <h4>${s.name}</h4>
+              <div class="local">${s.local_name}</div>
+              <div class="town">&#128205; ${s.municipality}</div>
+              <span class="price">${s.price_range}</span>
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html || "<p style='text-align:center;padding:20px;'>No souvenirs found.</p>";
+    }
+
+    loadFromApi();
+  </script>
+</body>
+</html>

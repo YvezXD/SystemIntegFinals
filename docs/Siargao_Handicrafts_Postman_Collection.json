@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Siargao Handicrafts REST API (Group 5)",
+    "description": "Postman Collection for testing all required REST API endpoints (GET, POST, PUT, DELETE, and Invalid Request handling). Change {{base_url}} to http://localhost:3000 (for Node server) or http://localhost/SystemIntegFinals (for XAMPP).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. GET All Records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/records.php",
+          "host": ["{{base_url}}"],
+          "path": ["api", "records.php"]
+        }
+      }
+    },
+    {
+      "name": "2. GET Specific Record by ID (ID = 1)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/record.php?id=1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "record.php"],
+          "query": [
+            { "key": "id", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. POST Insert New Record",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Woven Coconut Leaf Basket\",\n  \"local_name\": \"Puso / Lukay Basket\",\n  \"category\": \"Baskets & Storage\",\n  \"municipality\": \"Dapa, Siargao\",\n  \"materials\": \"Fresh Young Coconut Fronds (Lukay)\",\n  \"price_range\": \"PHP 50 - PHP 100\",\n  \"dimensions\": \"20 cm x 20 cm\",\n  \"description\": \"Handwoven traditional basket made from young coconut palm fronds in Dapa, Siargao.\",\n  \"cultural_significance\": \"Used by locals for carrying market goods and wrapping native delicacies.\",\n  \"source_reference\": \"Field Interview at Dapa Public Market\",\n  \"image_url\": \"images/02-woven-baskets.jpg\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/create.php",
+          "host": ["{{base_url}}"],
+          "path": ["api", "create.php"]
+        }
+      }
+    },
+    {
+      "name": "4. PUT Update Existing Record (ID = 1)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Buri Hat (Updated Edition)\",\n  \"local_name\": \"Kalo nga Buri\",\n  \"category\": \"Woven Headwear & Fans\",\n  \"municipality\": \"Del Carmen, Siargao\",\n  \"materials\": \"Dried Buri Palm Strips & Abaca Ribbon\",\n  \"price_range\": \"PHP 280 - PHP 400\",\n  \"dimensions\": \"42 cm diameter\",\n  \"description\": \"Updated description: Finely braided wide-brim sun hat crafted from sun-dried buri palm leaves.\",\n  \"cultural_significance\": \"Provides sun protection for locals and island visitors while supporting women weavers.\",\n  \"source_reference\": \"Interview & Photography at Dapa Public Market\",\n  \"image_url\": \"images/01-buri-hat.jpg\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/update.php?id=1",
+          "host": ["{{base_url}}"],
+          "path": ["api", "update.php"],
+          "query": [
+            { "key": "id", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. DELETE Record by ID (ID = 21)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/delete.php?id=21",
+          "host": ["{{base_url}}"],
+          "path": ["api", "delete.php"],
+          "query": [
+            { "key": "id", "value": "21" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Invalid Request Demo - Missing Record (404 Not Found)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/record.php?id=999",
+          "host": ["{{base_url}}"],
+          "path": ["api", "record.php"],
+          "query": [
+            { "key": "id", "value": "999" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Invalid Request Demo - Empty POST Body (400 Bad Request)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/create.php",
+          "host": ["{{base_url}}"],
+          "path": ["api", "create.php"]
+        }
+      }
+    }
+  ]
+}
