@@ -369,8 +369,9 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log("==============================================================");
   console.log(" Siargao Island Handicrafts - Local Knowledge Repository");
-  console.log(" Server running at: http://localhost:" + PORT);
-  console.log(" External App Demo: http://localhost:" + PORT + "/client-demo.html");
-  console.log(" REST API Base URL: http://localhost:" + PORT + "/api/records.php");
+  console.log(" Server running at:        http://localhost:" + PORT);
+  console.log(" System Integration Demo:  http://localhost:" + PORT + "/system-integration.html");
+  console.log(" External App Demo:        http://localhost:" + PORT + "/client-demo.html");
+  console.log(" REST API Base URL:        http://localhost:" + PORT + "/api/records.php");
   console.log("==============================================================");
 });

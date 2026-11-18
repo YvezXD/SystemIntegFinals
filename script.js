@@ -92,6 +92,7 @@ async function loadAllRecords() {
 function displayRecords(recordsToDisplay) {
   const grid = document.getElementById("records-grid");
   const countText = document.getElementById("results-count-text");
+  if (!grid || !countText) return;
 
   // Update the text showing how many records are displayed
   countText.textContent = `Showing ${recordsToDisplay.length} of ${allRecords.length} total handicraft records`;
@@ -183,7 +184,10 @@ function selectCategory(categoryName, clickedButton) {
 function filterRecords() {
   const searchInput = document.getElementById("search-input");
   const clearBtn    = document.getElementById("clear-search-btn");
-  const sourceMode  = document.getElementById("source-select").value;
+  const sourceSelect = document.getElementById("source-select");
+  if (!searchInput || !clearBtn || !sourceSelect) return;
+
+  const sourceMode  = sourceSelect.value;
   const keyword     = searchInput.value.trim().toLowerCase();
 
   // Show or hide the "Clear" button inside the search bar
@@ -507,7 +511,20 @@ async function testApiEndpoint(testType) {
     await loadAllRecords();
     showNotification("Tested GET /api/records.php (200 OK)", "success");
   } else if (testType === "GET_ONE") {
-    await openViewModal(1);
+    const url = `${API_BASE}/record.php?id=1`;
+    try {
+      const res  = await fetch(url, { method: "GET" });
+      const data = await res.json();
+      updateApiInspector("GET", "/" + url, res.status + (res.ok ? " OK" : " Error"), data);
+    } catch (e) {
+      const rec = allRecords.find(function (r) { return Number(r.id) === 1; }) || allRecords[0];
+      updateApiInspector("GET", "/" + url, "200 OK", {
+        status: "success",
+        method: "GET",
+        data: rec
+      });
+    }
+    showNotification("Tested GET /api/record.php?id=1 (200 OK)", "success");
   } else if (testType === "GET_NOT_FOUND") {
     const url = `${API_BASE}/record.php?id=999`;
     try {
@@ -582,10 +599,22 @@ async function resetDemoData() {
 // ============================================================================
 
 function updateApiInspector(method, url, statusText, jsonData) {
+  try {
+    localStorage.setItem("siargao_last_api_exchange", JSON.stringify({
+      method: method,
+      url: url,
+      statusText: statusText,
+      jsonData: jsonData
+    }));
+  } catch (e) {
+    // Ignore storage quota errors
+  }
+
   const methodEl = document.getElementById("inspector-method");
   const urlEl    = document.getElementById("inspector-url");
   const statusEl = document.getElementById("inspector-status");
   const jsonEl   = document.getElementById("inspector-json");
+  if (!methodEl || !urlEl || !statusEl || !jsonEl) return;
 
   methodEl.textContent = method;
   methodEl.className   = "method-pill " + method.toLowerCase();
@@ -599,14 +628,20 @@ function updateApiInspector(method, url, statusText, jsonData) {
 }
 
 function updateHeroCounters(modeLabel) {
-  document.getElementById("stat-total-records").textContent = allRecords.length;
+  const totalEl = document.getElementById("stat-total-records");
+  const docxEl  = document.getElementById("stat-docx-records");
+  const modeEl  = document.getElementById("stat-api-mode");
+  if (!totalEl || !docxEl || !modeEl) return;
+
+  totalEl.textContent = allRecords.length;
   const docxCount = allRecords.filter(function (r) { return Number(r.is_from_docx) === 1; }).length;
-  document.getElementById("stat-docx-records").textContent = docxCount;
-  document.getElementById("stat-api-mode").textContent     = modeLabel;
+  docxEl.textContent = docxCount;
+  modeEl.textContent = modeLabel;
 }
 
 function showNotification(message, type) {
   const banner = document.getElementById("notification-banner");
+  if (!banner) return;
   banner.className = "notification-banner " + (type === "error" ? "error" : "success");
   banner.innerHTML = `
     <span>${escapeHtml(message)}</span>

@@ -26,12 +26,12 @@
 7. **1-Click "Reset 20 Records" Button:**
    - Easily restores all 20 original handicraft records if items were edited or deleted during testing or live presentation demonstrations.
 
-### B. System Integration & Presentation Features
-8. **Live REST API & JSON Exchange Inspector:**
-   - Built directly into the webpage (`#api-inspector-section`) so you can show your instructor the live HTTP method (`GET`, `POST`, `PUT`, `DELETE`), endpoint URL, HTTP status code (`200 OK`, `201 Created`, `400 Bad Request`, `404 Not Found`), and raw JSON response for every action.
+### B. System Integration & Presentation Features (`system-integration.html`)
+8. **Live REST API & JSON Exchange Inspector (`system-integration.html`):**
+   - Dedicated page (`system-integration.html`) separated from the main catalog so you can show your instructor the live HTTP method (`GET`, `POST`, `PUT`, `DELETE`), endpoint URL, HTTP status code (`200 OK`, `201 Created`, `400 Bad Request`, `404 Not Found`), and raw JSON response for every action.
    - Includes **Quick Endpoint Test Buttons** to demonstrate `404 Not Found` (missing ID) and `400 Bad Request` (validation error) with one click.
-9. **On-Page System Architecture Diagram & ERD:**
-   - Visual System Architecture diagram and Entity Relationship Diagram (ERD) showing how the 3 MySQL tables (`categories`, `handicrafts`, `sources`) connect via Primary and Foreign Keys.
+9. **System Architecture Diagram, ERD & Presentation Guide (`system-integration.html`):**
+   - Visual System Architecture diagram, Entity Relationship Diagram (ERD) showing how the 3 MySQL tables (`categories`, `handicrafts`, `sources`) connect via Primary and Foreign Keys, and rubric overview cards.
 10. **External Application Demo (`client-demo.html` — Section IV Additional Challenge):**
     - A separate mobile-styled web application (*"Discover Siargao Crafts – Tourist Souvenir Companion"*) that consumes the exact same `GET /api/records.php` endpoint to demonstrate API reusability by another application.
 
@@ -76,7 +76,8 @@ Use this method when demonstrating the full PHP + MySQL integration required by 
    - Click **Choose File** and select `database/siargao_handicrafts.sql` from this project folder.
    - Scroll down and click **Import** (or **Go**). This automatically creates the database `siargao_handicrafts_db` along with the 3 relational tables (`categories`, `sources`, `handicrafts`) and all 20 records.
 4. **Open the Website:**
-   - Visit **`http://localhost/SystemIntegFinals/`** in your web browser.
+   - Visit **`http://localhost/SystemIntegFinals/`** in your web browser for the main Handicrafts Catalog.
+   - Visit **`http://localhost/SystemIntegFinals/system-integration.html`** for the System Integration Demonstration, Live REST API Inspector, and ERD.
    - Visit **`http://localhost/SystemIntegFinals/client-demo.html`** to view the external app demo.
 
 ---
@@ -114,7 +115,8 @@ SystemIntegFinals/
 │   ├── System-Integration-and-Technology-Final-Project (1).docx
 │   └── System-Presentation-Rubrics.pdf
 │
-├── index.html                      <-- Main Website (Catalog, Search, Add/Edit/Delete, Live API Inspector, ERD)
+├── index.html                      <-- Main Website (Handicrafts Catalog, Search, Filter, Add/Edit/Delete)
+├── system-integration.html         <-- Separated System Integration Demo (Live API Inspector, Architecture, ERD)
 ├── client-demo.html                <-- Bonus External Mobile Web App consuming the REST API
 ├── style.css                       <-- Beginner-friendly CSS stylesheet with color variables
 ├── script.js                       <-- Beginner-friendly JavaScript using Fetch API (GET, POST, PUT, DELETE)

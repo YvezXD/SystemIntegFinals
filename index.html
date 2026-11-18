@@ -25,8 +25,8 @@
 
       <nav class="nav-links">
         <a href="#catalog-section" class="nav-link active">Handicrafts Catalog</a>
-        <a href="#api-inspector-section" class="nav-link">Live API &amp; JSON</a>
-        <a href="#architecture-section" class="nav-link">ERD &amp; System Info</a>
+        <a href="system-integration.html" class="nav-link">System Integration Demo</a>
+        <a href="system-integration.html#architecture-section" class="nav-link">ERD &amp; System Info</a>
         <a href="client-demo.html" class="nav-link btn-external-app" target="_blank">
           External App Demo &#8599;
         </a>
@@ -52,8 +52,8 @@
           <button class="btn btn-primary" onclick="openAddModal()">
             + Add New Handicraft (POST)
           </button>
-          <a href="#api-inspector-section" class="btn btn-secondary">
-            View Live JSON API
+          <a href="system-integration.html" class="btn btn-secondary">
+            System Integration &amp; API Demo
           </a>
         </div>
       </div>
@@ -154,257 +154,7 @@
   </main>
 
   <!-- ========================================================================
-       4. LIVE REST API & JSON INSPECTOR SECTION
-       Demonstrates how the frontend communicates with the PHP/MySQL API via JSON.
-       Perfect for live demonstration during the final project presentation!
-       ======================================================================== -->
-  <section class="api-section" id="api-inspector-section">
-    <div class="container">
-      <div class="section-header-Row">
-        <div>
-          <span class="section-badge">SYSTEM INTEGRATION DEMONSTRATION</span>
-          <h3 class="section-heading">Live REST API &amp; JSON Exchange Inspector</h3>
-          <p class="section-subtext">
-            Every action on this website communicates with the REST API using JavaScript's
-            <code>fetch()</code> and exchanges data in <code>JSON</code> format. Use the quick test buttons
-            below to inspect live HTTP requests, status codes, and validation handling.
-          </p>
-        </div>
-      </div>
-
-      <!-- Quick API Endpoint Test Buttons (Great for Q&A and Presentation!) -->
-      <div class="api-test-bar">
-        <span class="api-test-label">Quick Endpoint Tests:</span>
-        <button class="btn-api-test get" onclick="testApiEndpoint('GET_ALL')">
-          <span class="method-pill get">GET</span> /api/records.php
-        </button>
-        <button class="btn-api-test get" onclick="testApiEndpoint('GET_ONE')">
-          <span class="method-pill get">GET</span> /api/record.php?id=1
-        </button>
-        <button class="btn-api-test error" onclick="testApiEndpoint('GET_NOT_FOUND')">
-          <span class="method-pill get">GET</span> /api/record.php?id=999 (404 Not Found Demo)
-        </button>
-        <button class="btn-api-test error" onclick="testApiEndpoint('POST_INVALID')">
-          <span class="method-pill post">POST</span> /api/create.php (400 Validation Error Demo)
-        </button>
-      </div>
-
-      <!-- API Inspector Console Box -->
-      <div class="api-console">
-        <div class="api-console-header">
-          <div class="api-request-info">
-            <span class="method-pill get" id="inspector-method">GET</span>
-            <code class="endpoint-url" id="inspector-url">/api/records.php</code>
-          </div>
-          <div class="api-status-info">
-            <span>HTTP Status:</span>
-            <span class="status-code-badge status-200" id="inspector-status">200 OK</span>
-          </div>
-        </div>
-        <pre class="api-json-output" id="inspector-json">// JSON response from the REST API will appear here automatically...</pre>
-      </div>
-
-      <!-- Reference Table of Required API Endpoints -->
-      <div class="endpoints-table-wrapper">
-        <h4>Implemented PHP + MySQL REST API Endpoints</h4>
-        <table class="endpoints-table">
-          <thead>
-            <tr>
-              <th>HTTP Method</th>
-              <th>API Endpoint File</th>
-              <th>Required Functionality</th>
-              <th>Success Status</th>
-              <th>Error Handling</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="method-pill get">GET</span></td>
-              <td><code>/api/records.php</code></td>
-              <td>Retrieve all handicraft records (supports <code>?search=</code> and <code>?category=</code>)</td>
-              <td><code>200 OK</code></td>
-              <td><code>405 Method Not Allowed</code></td>
-            </tr>
-            <tr>
-              <td><span class="method-pill get">GET</span></td>
-              <td><code>/api/record.php?id=1</code></td>
-              <td>Retrieve a specific handicraft record using its unique ID</td>
-              <td><code>200 OK</code></td>
-              <td><code>400 Bad Request</code>, <code>404 Not Found</code></td>
-            </tr>
-            <tr>
-              <td><span class="method-pill post">POST</span></td>
-              <td><code>/api/create.php</code></td>
-              <td>Validate incoming JSON and insert a new handicraft record using prepared statements</td>
-              <td><code>201 Created</code></td>
-              <td><code>400 Validation Error</code></td>
-            </tr>
-            <tr>
-              <td><span class="method-pill put">PUT</span></td>
-              <td><code>/api/update.php?id=1</code></td>
-              <td>Validate incoming JSON and update an existing record in the database</td>
-              <td><code>200 OK</code></td>
-              <td><code>400 Bad Request</code>, <code>404 Not Found</code></td>
-            </tr>
-            <tr>
-              <td><span class="method-pill delete">DELETE</span></td>
-              <td><code>/api/delete.php?id=1</code></td>
-              <td>Delete a specific record from the database using its ID</td>
-              <td><code>200 OK</code></td>
-              <td><code>400 Bad Request</code>, <code>404 Not Found</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       5. SYSTEM ARCHITECTURE, DATABASE ERD & PRESENTATION GUIDE SECTION
-       Covers all 9 items required by System-Presentation-Rubrics.pdf!
-       ======================================================================== -->
-  <section class="architecture-section" id="architecture-section">
-    <div class="container">
-      <span class="section-badge">PROJECT DELIVERABLES &amp; PRESENTATION GUIDE</span>
-      <h3 class="section-heading">System Architecture, Database Structure (ERD) &amp; Overview</h3>
-      <p class="section-subtext">
-        Designed for easy maintenance and clear explanation during the System Integration &amp; Architecture presentation.
-      </p>
-
-      <!-- Visual System Architecture Flow Diagram -->
-      <div class="diagram-box">
-        <h4>1. System Architecture Diagram (How Components Integrate)</h4>
-        <div class="arch-flow">
-          <div class="arch-node">
-            <div class="arch-step">CLIENT LAYER</div>
-            <h5>Web Browser &amp; External App</h5>
-            <p><code>index.html</code>, <code>style.css</code>, <code>script.js</code> &amp; <code>client-demo.html</code></p>
-          </div>
-          <div class="arch-arrow">
-            <span>HTTP Request (GET/POST/PUT/DELETE)</span>
-            <div class="arrow-line">&longleftrightarrow;</div>
-            <span>JSON Response (Fetch API)</span>
-          </div>
-          <div class="arch-node highlight">
-            <div class="arch-step">APPLICATION / API LAYER</div>
-            <h5>PHP RESTful API</h5>
-            <p><code>records.php</code>, <code>record.php</code>, <code>create.php</code>, <code>update.php</code>, <code>delete.php</code></p>
-          </div>
-          <div class="arch-arrow">
-            <span>Prepared SQL Queries (mysqli)</span>
-            <div class="arrow-line">&longleftrightarrow;</div>
-            <span>Relational Result Rows</span>
-          </div>
-          <div class="arch-node">
-            <div class="arch-step">DATA LAYER</div>
-            <h5>MySQL Relational Database</h5>
-            <p><code>siargao_handicrafts_db</code> (3 Relational Tables)</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Entity Relationship Diagram (ERD) -->
-      <div class="diagram-box">
-        <h4>2. Entity Relationship Diagram (ERD) &amp; Database Schema</h4>
-        <p class="diagram-note">
-          SQL File Location: <code>database/siargao_handicrafts.sql</code> &bull; Database Name: <code>siargao_handicrafts_db</code>
-        </p>
-        <div class="erd-grid">
-          <!-- Table 1: categories -->
-          <div class="erd-table">
-            <div class="erd-table-header">categories (1)</div>
-            <ul class="erd-fields">
-              <li><span class="key-badge pk">PK</span> <strong>category_id</strong> <code>INT AUTO_INCREMENT</code></li>
-              <li><strong>category_name</strong> <code>VARCHAR(100)</code></li>
-              <li><strong>category_description</strong> <code>VARCHAR(255)</code></li>
-            </ul>
-          </div>
-
-          <div class="erd-relation">1 &mdash;&mdash;&lt; Many</div>
-
-          <!-- Table 2: handicrafts -->
-          <div class="erd-table main-table">
-            <div class="erd-table-header">handicrafts (Many)</div>
-            <ul class="erd-fields">
-              <li><span class="key-badge pk">PK</span> <strong>id</strong> <code>INT AUTO_INCREMENT</code></li>
-              <li><span class="key-badge fk">FK</span> <strong>category_id</strong> <code>INT</code> &rarr; <em>categories</em></li>
-              <li><span class="key-badge fk">FK</span> <strong>source_id</strong> <code>INT</code> &rarr; <em>sources</em></li>
-              <li><strong>name</strong> <code>VARCHAR(150)</code></li>
-              <li><strong>local_name</strong> <code>VARCHAR(150)</code></li>
-              <li><strong>category</strong> <code>VARCHAR(100)</code></li>
-              <li><strong>materials</strong> <code>VARCHAR(200)</code></li>
-              <li><strong>municipality</strong> <code>VARCHAR(100)</code></li>
-              <li><strong>price_range</strong> <code>VARCHAR(50)</code></li>
-              <li><strong>dimensions</strong> <code>VARCHAR(100)</code></li>
-              <li><strong>description</strong> <code>TEXT</code></li>
-              <li><strong>cultural_significance</strong> <code>TEXT</code></li>
-              <li><strong>source_reference</strong> <code>VARCHAR(255)</code></li>
-              <li><strong>image_url</strong> <code>VARCHAR(255)</code></li>
-              <li><strong>is_from_docx</strong> <code>TINYINT(1)</code></li>
-              <li><strong>date_gathered</strong> <code>DATE</code></li>
-            </ul>
-          </div>
-
-          <div class="erd-relation">Many &gt;&mdash;&mdash; 1</div>
-
-          <!-- Table 3: sources -->
-          <div class="erd-table">
-            <div class="erd-table-header">sources (1)</div>
-            <ul class="erd-fields">
-              <li><span class="key-badge pk">PK</span> <strong>source_id</strong> <code>INT AUTO_INCREMENT</code></li>
-              <li><strong>source_name</strong> <code>VARCHAR(150)</code></li>
-              <li><strong>municipality</strong> <code>VARCHAR(100)</code></li>
-              <li><strong>barangay</strong> <code>VARCHAR(100)</code></li>
-              <li><strong>gathering_method</strong> <code>VARCHAR(150)</code></li>
-              <li><strong>verified_by</strong> <code>VARCHAR(150)</code></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <!-- Presentation Guidelines Cards (Answers Rubric Items 1-9) -->
-      <div class="presentation-cards-grid">
-        <div class="info-card">
-          <h5>Problem Statement &amp; Significance</h5>
-          <p>
-            Information about Siargao Island's traditional handicrafts (such as buri hats, salakot,
-            nigo trays, sungka boards, and rattan weaving) is rarely documented online in a structured
-            format. This system preserves local cultural knowledge and exposes it via a reusable REST API
-            for tourism portals, schools, and local livelihood platforms.
-          </p>
-        </div>
-
-        <div class="info-card">
-          <h5>Target Users</h5>
-          <p>
-            <strong>1. Local Artisans &amp; Cooperatives:</strong> Showcase products from Dapa, Del Carmen, General Luna, Pilar, and San Isidro.<br />
-            <strong>2. Tourists &amp; Cultural Researchers:</strong> Discover authentic Siargaonon crafts, materials, and local names.<br />
-            <strong>3. Third-Party Developers:</strong> Reuse the JSON REST API in mobile or tourism apps.
-          </p>
-        </div>
-
-        <div class="info-card">
-          <h5>Validation, Security &amp; Error Handling</h5>
-          <p>
-            &bull; <strong>Prepared Statements:</strong> All SQL queries use <code>$conn-&gt;prepare()</code> and <code>bind_param()</code> to prevent SQL Injection.<br />
-            &bull; <strong>Server &amp; Client Validation:</strong> Checks required fields before <code>POST</code> / <code>PUT</code>.<br />
-            &bull; <strong>HTTP Status Codes:</strong> Returns <code>200</code>, <code>201</code>, <code>400</code>, <code>404</code>, and <code>405</code> accurately.
-          </p>
-        </div>
-
-        <div class="info-card">
-          <h5>Limitations &amp; Future Improvements</h5>
-          <p>
-            &bull; <strong>Current Limitation:</strong> Designed as a local knowledge repository without online payment processing or user login roles.<br />
-            &bull; <strong>Future Improvements:</strong> Add JWT authentication for admin actions, direct photo file uploads, interactive Siargao map pins, and multi-language translations.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       6. MODAL 1: VIEW COMPLETE RECORD DETAILS (GET /api/record.php?id=X)
+       4. MODAL 1: VIEW COMPLETE RECORD DETAILS (GET /api/record.php?id=X)
        ======================================================================== -->
   <div id="view-modal" class="modal-overlay" style="display: none;" onclick="closeModalOnOutsideClick(event, 'view-modal')">
     <div class="modal-box modal-large">
@@ -604,7 +354,7 @@
   </div>
 
   <!-- ========================================================================
-       8. FOOTER
+       6. FOOTER
        ======================================================================== -->
   <footer class="footer">
     <div class="container footer-content">
@@ -614,8 +364,8 @@
       </div>
       <div class="footer-links">
         <a href="#catalog-section">Catalog</a>
-        <a href="#api-inspector-section">REST API Inspector</a>
-        <a href="#architecture-section">ERD &amp; Docs</a>
+        <a href="system-integration.html">System Integration Demo</a>
+        <a href="system-integration.html#architecture-section">ERD &amp; Docs</a>
         <a href="client-demo.html" target="_blank">External App Demo</a>
       </div>
     </div>
