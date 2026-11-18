@@ -143,18 +143,44 @@ function displayRecords(recordsToDisplay) {
             <div><strong>Price Range:</strong> ${escapeHtml(item.price_range || "PHP 150 - PHP 350")}</div>
           </div>
 
-          <p class="card-description">${escapeHtml(item.description)}</p>
+          <p class="card-description" id="card-short-desc-${item.id}">${escapeHtml(item.description)}</p>
 
           <div class="card-actions">
-            <button class="btn btn-secondary btn-sm" onclick="openViewModal(${item.id})">
-              View Details
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-details-${item.id}" onclick="toggleCardDetails(${item.id})">
+              View Details &#9662;
             </button>
-            <button class="btn btn-outline btn-sm" onclick="openEditModal(${item.id})">
+            <button type="button" class="btn btn-outline btn-sm" onclick="openEditModal(${item.id})">
               Edit
             </button>
-            <button class="btn btn-danger btn-sm" onclick="deleteRecord(${item.id})">
+            <button type="button" class="btn btn-danger btn-sm" onclick="deleteRecord(${item.id})">
               Delete
             </button>
+          </div>
+
+          <!-- Expandable Dropdown Box for Complete Record Details (GET /api/record.php?id=X) -->
+          <div id="card-details-${item.id}" class="card-details-dropdown" style="display: none;">
+            <div class="dropdown-api-badge" id="dropdown-badge-${item.id}">GET /api/record.php?id=${item.id}</div>
+
+            <div class="dropdown-detail-row">
+              <strong>Complete Description:</strong>
+              <p id="dropdown-desc-${item.id}">${escapeHtml(item.description)}</p>
+            </div>
+
+            <div class="dropdown-detail-row">
+              <strong>Dimensions / Size:</strong>
+              <span id="dropdown-dim-${item.id}">${escapeHtml(item.dimensions || "Standard Artisan Size")}</span>
+            </div>
+
+            <div class="dropdown-detail-row">
+              <strong>Cultural &amp; Community Significance:</strong>
+              <p id="dropdown-sig-${item.id}">${escapeHtml(item.cultural_significance || "Traditional Siargao Island handicraft.")}</p>
+            </div>
+
+            <div class="dropdown-source-meta">
+              <div><strong>Source / Reference:</strong> <span id="dropdown-src-${item.id}">${escapeHtml(item.source_reference || "Field Data Gathering - Siargao Island")}</span></div>
+              <div><strong>Verified By:</strong> <span id="dropdown-ver-${item.id}">${escapeHtml(item.verified_by || "Local Siargao Artisan Collective")}</span></div>
+              <div><strong>Date Gathered:</strong> <span id="dropdown-date-${item.id}">${escapeHtml(item.date_gathered || "2026-11-12")}</span> &bull; <strong>Record ID:</strong> #${item.id}</div>
+            </div>
           </div>
         </div>
       </article>
@@ -234,14 +260,50 @@ function clearSearch() {
 }
 
 // ============================================================================
-// PART 4: VIEW COMPLETE INFORMATION OF A SELECTED RECORD (GET /api/record.php?id=X)
+// PART 4: VIEW COMPLETE INFORMATION AS A DROPDOWN ON THE CATALOGUE CARD
+//         (Fetches GET /api/record.php?id=X)
 // ============================================================================
-async function openViewModal(id) {
+async function toggleCardDetails(id) {
+  const dropdownBox = document.getElementById(`card-details-${id}`);
+  const toggleBtn   = document.getElementById(`btn-details-${id}`);
+  if (!dropdownBox || !toggleBtn) return;
+
+  const parentCard = dropdownBox.closest(".craft-card");
+
+  // If the dropdown box is already open, close it
+  const isCurrentlyOpen = dropdownBox.style.display === "block";
+  if (isCurrentlyOpen) {
+    dropdownBox.style.display = "none";
+    if (parentCard) parentCard.classList.remove("dropdown-open");
+    toggleBtn.innerHTML = "View Details &#9662;";
+    toggleBtn.classList.remove("active");
+    return;
+  }
+
+  // Close any other open card dropdowns first so only one overlays at a time
+  const allDropdowns = document.querySelectorAll(".card-details-dropdown");
+  for (let i = 0; i < allDropdowns.length; i++) {
+    allDropdowns[i].style.display = "none";
+    const card = allDropdowns[i].closest(".craft-card");
+    if (card) card.classList.remove("dropdown-open");
+  }
+  const allDetailBtns = document.querySelectorAll("[id^='btn-details-']");
+  for (let i = 0; i < allDetailBtns.length; i++) {
+    allDetailBtns[i].innerHTML = "View Details &#9662;";
+    allDetailBtns[i].classList.remove("active");
+  }
+
+  // Open the floating dropdown overlay and bring this card to the front
+  dropdownBox.style.display = "block";
+  if (parentCard) parentCard.classList.add("dropdown-open");
+  toggleBtn.innerHTML = "Hide Details &#9652;";
+  toggleBtn.classList.add("active");
+
+  // Fetch the complete record from GET /api/record.php?id=X
   const endpointUrl = `${API_BASE}/record.php?id=${id}`;
   let record = null;
 
   try {
-    // Call GET /api/record.php?id=X
     const response = await fetch(endpointUrl, { method: "GET" });
     const result   = await response.json();
 
@@ -262,43 +324,27 @@ async function openViewModal(id) {
     }
   }
 
-  if (!record) {
-    showNotification("Record not found.", "error");
-    return;
+  // Update the dropdown fields with fresh data from the API
+  if (record) {
+    const descEl = document.getElementById(`dropdown-desc-${id}`);
+    const dimEl  = document.getElementById(`dropdown-dim-${id}`);
+    const sigEl  = document.getElementById(`dropdown-sig-${id}`);
+    const srcEl  = document.getElementById(`dropdown-src-${id}`);
+    const verEl  = document.getElementById(`dropdown-ver-${id}`);
+    const dateEl = document.getElementById(`dropdown-date-${id}`);
+
+    if (descEl) descEl.textContent = record.description;
+    if (dimEl)  dimEl.textContent  = record.dimensions || "Standard Artisan Size";
+    if (sigEl)  sigEl.textContent  = record.cultural_significance || "Traditional Siargao Island handicraft.";
+    if (srcEl)  srcEl.textContent  = record.source_reference || "Field Data Gathering - Siargao Island";
+    if (verEl)  verEl.textContent  = record.verified_by || "Local Siargao Artisan Collective";
+    if (dateEl) dateEl.textContent = record.date_gathered || "2026-11-12";
   }
-
-  // Fill the View Modal with the record's complete information
-  document.getElementById("view-modal-api-badge").textContent = `GET /api/record.php?id=${record.id}`;
-  document.getElementById("view-title").textContent        = record.name;
-  document.getElementById("view-image").src                = record.image_url;
-  document.getElementById("view-category").textContent     = record.category;
-  document.getElementById("view-local-name").textContent   = record.local_name || record.name;
-  document.getElementById("view-municipality").textContent = record.municipality;
-  document.getElementById("view-price").textContent        = record.price_range || "PHP 150 - PHP 350";
-  document.getElementById("view-materials").textContent    = record.materials;
-  document.getElementById("view-dimensions").textContent   = record.dimensions || "Standard Artisan Size";
-  document.getElementById("view-description").textContent  = record.description;
-  document.getElementById("view-significance").textContent = record.cultural_significance || "Traditional Siargao Island handicraft.";
-  document.getElementById("view-source").textContent       = record.source_reference || "Field Data Gathering - Siargao Island";
-  document.getElementById("view-verified").textContent     = record.verified_by || "Local Siargao Artisan Collective";
-  document.getElementById("view-date").textContent         = record.date_gathered || "2026-11-12";
-  document.getElementById("view-id").textContent           = record.id;
-
-  const docxBadge = document.getElementById("view-docx-badge");
-  docxBadge.style.display = Number(record.is_from_docx) === 1 ? "inline-block" : "none";
-
-  // Connect the "Edit This Record" button inside the View Modal
-  document.getElementById("view-edit-btn").onclick = function () {
-    closeViewModal();
-    openEditModal(record.id);
-  };
-
-  // Show the modal
-  document.getElementById("view-modal").style.display = "flex";
 }
 
-function closeViewModal() {
-  document.getElementById("view-modal").style.display = "none";
+// Keep openViewModal as an alias so any existing calls still work
+function openViewModal(id) {
+  return toggleCardDetails(id);
 }
 
 // ============================================================================

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Siargao Island Handicrafts | Local Knowledge Repository (Group 5)</title>
   <!-- Main Stylesheet (Easy to read and customize) -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=4" />
 </head>
 <body>
 
@@ -134,82 +134,7 @@
   </main>
 
   <!-- ========================================================================
-       4. MODAL 1: VIEW COMPLETE RECORD DETAILS (GET /api/record.php?id=X)
-       ======================================================================== -->
-  <div id="view-modal" class="modal-overlay" style="display: none;" onclick="closeModalOnOutsideClick(event, 'view-modal')">
-    <div class="modal-box modal-large">
-      <div class="modal-header">
-        <div>
-          <span class="modal-api-badge" id="view-modal-api-badge">GET /api/record.php?id=1</span>
-          <h3 id="view-title">Handicraft Name</h3>
-        </div>
-        <button class="modal-close-btn" onclick="closeViewModal()">&times;</button>
-      </div>
-
-      <div class="modal-body view-modal-grid">
-        <div class="view-image-column">
-          <img id="view-image" src="" alt="Handicraft Photo" class="view-main-image" />
-          <div class="view-badges-row">
-            <span class="badge badge-category" id="view-category">Category</span>
-            <span class="badge badge-docx" id="view-docx-badge">Featured in handicrafts.docx</span>
-          </div>
-        </div>
-
-        <div class="view-details-column">
-          <div class="detail-group">
-            <label>Local / Surigaonon Name:</label>
-            <p id="view-local-name" class="detail-highlight"></p>
-          </div>
-
-          <div class="detail-two-cols">
-            <div class="detail-group">
-              <label>Municipality / Origin:</label>
-              <p id="view-municipality"></p>
-            </div>
-            <div class="detail-group">
-              <label>Estimated Price Range:</label>
-              <p id="view-price"></p>
-            </div>
-          </div>
-
-          <div class="detail-two-cols">
-            <div class="detail-group">
-              <label>Raw Materials Used:</label>
-              <p id="view-materials"></p>
-            </div>
-            <div class="detail-group">
-              <label>Dimensions / Size:</label>
-              <p id="view-dimensions"></p>
-            </div>
-          </div>
-
-          <div class="detail-group">
-            <label>Complete Description:</label>
-            <p id="view-description"></p>
-          </div>
-
-          <div class="detail-group">
-            <label>Cultural &amp; Community Significance:</label>
-            <p id="view-significance"></p>
-          </div>
-
-          <div class="detail-source-box">
-            <div><strong>Source / Field Reference:</strong> <span id="view-source"></span></div>
-            <div><strong>Verified By:</strong> <span id="view-verified"></span></div>
-            <div><strong>Date Gathered:</strong> <span id="view-date"></span> &bull; <strong>Record ID:</strong> #<span id="view-id"></span></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-outline" onclick="closeViewModal()">Close</button>
-        <button class="btn btn-secondary" id="view-edit-btn">Edit This Record (PUT)</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================================
-       7. MODAL 2: ADD OR UPDATE HANDICRAFT RECORD (POST / PUT)
+       4. MODAL: ADD OR UPDATE HANDICRAFT RECORD (POST / PUT)
        ======================================================================== -->
   <div id="form-modal" class="modal-overlay" style="display: none;" onclick="closeModalOnOutsideClick(event, 'form-modal')">
     <div class="modal-box">
@@ -356,7 +281,7 @@
        - database/initial_data.js provides starter records if opened without XAMPP
        - script.js contains all Fetch API calls (GET, POST, PUT, DELETE) and UI logic
        ======================================================================== -->
-  <script src="database/initial_data.js"></script>
-  <script src="script.js"></script>
+  <script src="database/initial_data.js?v=4"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
